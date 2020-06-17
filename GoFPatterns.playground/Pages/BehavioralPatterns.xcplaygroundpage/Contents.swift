@@ -333,7 +333,153 @@ hero.RestoreState(memento: game.History.last!)
 
 hero.Shoot(); //делаем выстрел, осталось 8 патронов
 
+//:  ## _Observer (Publisher-Subscriber)_
+//: ### Наблюдатель — это поведенческий паттерн проектирования, который создаёт механизм подписки, позволяющий одним объектам следить и реагировать на события, происходящие в других объектах.
+//:Когда использовать Наблюдатель?
+//: * Когда система состоит из множества классов, объекты которых должны находиться в согласованных состояниях
+//: * Когда общая схема взаимодействия объектов предполагает две стороны: одна рассылает сообщения и является главным, другая получает сообщения и реагирует на них. Отделение логики обеих сторон позволяет их рассматривать независимо и использовать отдельно друга от друга.
+//: * Когда существует один объект, рассылающий сообщения, и множество подписчиков, которые получают сообщения. При этом точное число подписчиков заранее неизвестно и процессе работы программы может изменяться.
+//:
+//:Участники:
+//: * Observable: представляет наблюдаемый объект. Определяет три метода: AddObserver() (для добавления наблюдателя), RemoveObserver() (удаление набюдателя) и NotifyObservers() (уведомление наблюдателей)
+//: * ConcreteObservable: конкретная реализация интерфейса Observable. Определяет коллекцию объектов наблюдателей.
+//: * Observer: представляет наблюдателя, который подписывается на все уведомления наблюдаемого объекта. Определяет метод Update(), который вызывается наблюдаемым объектом для уведомления наблюдателя.
+//: * ConcreteObserver: конкретная реализация интерфейса IObserver.
+//:
+//: [Более подробно](https://refactoring.guru/ru/design-patterns/observer) и [тут](https://metanit.com/sharp/patterns/3.2.php)
 
+///Observer
+protocol Subscriber{
+    func Update(stockInfo: StockInfo)
+    func isEqualTo(_ other: Subscriber) -> Bool
+}
+
+extension Subscriber where Self : Equatable{
+    func isEqualTo(_ other: Subscriber) -> Bool {
+        guard let otherSubscriber = other as? Self else { return false }
+        return self == otherSubscriber
+    }
+}
+///Observable
+protocol Publisher{
+    var subscribers: [Subscriber] { get set }
+     
+    func RegisterObserver(subscriber: Subscriber)
+    func RemoveObserver(subscriber: Subscriber)
+    func NotifyObservers()
+}
+ 
+// информация о торгах
+class StockInfo{
+    var USD: Double = 0
+    var Euro: Double = 0
+}
+
+class Broker : Subscriber, Equatable{
+    
+    func Update(stockInfo: StockInfo) {
+        if(stockInfo.USD > 61){
+            print("Брокер \(self.name) продает доллары;  Курс доллара: \(stockInfo.USD)")
+        }
+        else{
+            print("Брокер \(self.name)  покупает доллары;  Курс доллара: \(stockInfo.USD)")
+        }
+    }
+    
+    static func == (lhs: Broker, rhs: Broker) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    let name: String
+    let id = UUID()
+    var stock: Stock
+    
+    init(name: String, stock: Stock)
+    {
+        self.name = name
+        self.stock = stock
+        stock.RegisterObserver(subscriber: self)
+    }
+    
+    func Update(publisher: Stock){
+        
+    }
+    
+    func StopTrade(){
+        self.stock.RemoveObserver(subscriber: self)
+    }
+}
+
+class Bank : Subscriber, Equatable{
+    
+    static func == (lhs: Bank, rhs: Bank) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    let name: String
+    let id = UUID()
+    
+    init(name: String)
+    {
+        self.name = name
+        stock.RegisterObserver(subscriber: self)
+    }
+    
+    func Update(stockInfo: StockInfo) {
+        if (stockInfo.Euro > 75){
+            print("Банк \(self.name) продает евро;  Курс евро: \(stockInfo.Euro)")
+        }
+        else{
+            print("Банк \(self.name) покупает евро;  Курс евро: \(stockInfo.Euro)")
+        }
+    }
+}
+
+//биржа
+final class Stock: Publisher{
+    var subscribers: [Subscriber]
+    
+    //акции
+    var sInfo: StockInfo
+    
+    func RegisterObserver(subscriber: Subscriber) {
+        self.subscribers.append(subscriber)
+    }
+
+    func RemoveObserver(subscriber: Subscriber){
+        if let index = self.subscribers.firstIndex(where: {$0.isEqualTo(subscriber) }){
+            self.subscribers.remove(at: index)
+        }
+    }
+
+    func NotifyObservers() {
+        for subscriber in self.subscribers{
+            subscriber.Update(stockInfo: sInfo)
+        }
+    }
+ 
+    func Trade(){
+        sInfo.USD = Double.random(in: 60.0 ..< 70.0)
+        sInfo.Euro = Double.random(in: 70.0 ..< 80.0)
+        self.NotifyObservers()
+    }
+    
+    init(){
+        self.subscribers = [Subscriber]()
+        self.sInfo = StockInfo()
+    }
+}
+
+var stock = Stock()
+var bank = Bank(name: "ЮнитБанк")
+var broker = Broker(name: "Иван Иваныч", stock: stock)
+// имитация торгов
+stock.Trade()
+// брокер прекращает наблюдать за торгами
+broker.StopTrade()
+// имитация торгов
+stock.Trade()
+stock.Trade()
 //: [к содержанию](Intro)
 //:
 //: [к порождающим паттернам](CreationalPatterns)
