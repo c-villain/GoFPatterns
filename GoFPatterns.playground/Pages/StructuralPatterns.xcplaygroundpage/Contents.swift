@@ -45,7 +45,6 @@ protocol Moveable{
     func move()
 }
 
-
 ///Adaptee
 struct Camel: Moveable {
     func move()
@@ -93,7 +92,6 @@ man.travel(transport: camelAdapter)
 //: * Client: использует объекты Abstraction
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/bridge) и [тут](https://metanit.com/sharp/patterns/4.6.php)
-
 
 ///Implementor
 protocol Language{
