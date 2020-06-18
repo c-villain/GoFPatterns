@@ -15,7 +15,6 @@ import Foundation
 //: * Adapter: собственно адаптер, который позволяет работать с объектами Adaptee как с объектами Target.
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/adapter) и [тут](https://metanit.com/sharp/patterns/4.2.php)
-
 ///Target
 protocol Driveable{
     func drive()
@@ -78,7 +77,6 @@ let camel = Camel()
 let camelAdapter = CamelToTransportAdapter(camel: camel)
 
 man.travel(transport: camelAdapter)
-
 //:  ## _Bridge_
 //: ### Мост — это структурный паттерн проектирования, который разделяет один или несколько классов на две отдельные иерархии — абстракцию и реализацию, позволяя изменять их независимо друг от друга.
 //: ### Когда использовать данный паттерн?
@@ -92,7 +90,6 @@ man.travel(transport: camelAdapter)
 //: * Client: использует объекты Abstraction
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/bridge) и [тут](https://metanit.com/sharp/patterns/4.6.php)
-
 ///Implementor
 protocol Language{
     func Build()
@@ -162,7 +159,6 @@ freelancer.earnMoney()
 freelancer.language = SwiftLanguage();
 freelancer.doWork();
 freelancer.earnMoney();
-
 //:  ## _Composite_
 //: ### Компоновщик — это структурный паттерн проектирования, который позволяет сгруппировать множество объектов в древовидную структуру, а затем работать с ней так, как будто это единичный объект.
 //: Паттерн Компоновщик (Composite) объединяет группы объектов в древовидную структуру по принципу "часть-целое и позволяет клиенту одинаково работать как с отдельными объектами, так и с группой объектов.
@@ -177,7 +173,6 @@ freelancer.earnMoney();
 //: * Client: клиент, который использует компоненты
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/composite) и [тут](https://metanit.com/sharp/patterns/4.4.php)
-
 ///Component
 protocol Vehicle{
     mutating func drive()
@@ -219,7 +214,6 @@ struct CarPark: Vehicle{
 
 var carPark = CarPark(vehicles: Bus(), Truck(), Car())
 carPark.drive()
-
 //:  ## _Decorator_
 //: ### Декоратор — это структурный паттерн проектирования, который позволяет динамически добавлять объектам новую функциональность, оборачивая их в полезные «обёртки».
 //: Для определения нового функционала в классах нередко используется наследование. Декораторы же предоставляет наследованию более гибкую альтернативу, поскольку позволяют динамически в процессе выполнения определять новые возможности у объектов.
@@ -230,7 +224,6 @@ carPark.drive()
 //: * Классы ConcreteDecoratorA и ConcreteDecoratorB представляют дополнительные функциональности, которыми должен быть расширен объект ConcreteComponent.
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/decorator) и [тут](https://metanit.com/sharp/patterns/4.1.php)
-
 ///Component
 protocol Pizza{
     var name: String { get }
@@ -304,7 +297,6 @@ var pizza3: Pizza = BulgerianPizza();
 pizza3 = TomatoPizza(pizza: pizza3);
 pizza3 = CheesePizza(pizza: pizza3);// болгарская пиццы с томатами и сыром
 print("Name: \(pizza3.name), price: \(pizza3.getCost())")
-
 //:  ## _Facade_
 //: ### Фасад — это структурный паттерн проектирования, который предоставляет простой интерфейс к сложной системе классов, библиотеке или фреймворку.
 //: Когда использовать фасад?
@@ -317,7 +309,6 @@ print("Name: \(pizza3.name), price: \(pizza3.getCost())")
 //: * Facade - непосредственно фасад, который предоставляет интерфейс клиенту для работы с компонентами
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/facade) и [тут](https://metanit.com/sharp/patterns/4.3.php)
-
 ///SubsystemA
 struct FrontEndCompileStage{
     func parse(){
@@ -377,7 +368,6 @@ struct Xcode{
 
 let xcode = Xcode()
 xcode.compileApp(compiler: CompilerFacade(front: FrontEndCompileStage(), middle: MiddleEndCompilerStage(), back: BackEndComplilerStage()))
-
 //:  ## _Proxy_
 //: ### Заместитель — это структурный паттерн проектирования, который позволяет подставлять вместо реальных объектов специальные объекты-заменители. Эти объекты перехватывают вызовы к оригинальному объекту, позволяя сделать что-то до или после передачи вызова оригиналу.
 //: Когда использовать прокси?
@@ -392,9 +382,7 @@ xcode.compileApp(compiler: CompilerFacade(front: FrontEndCompileStage(), middle:
 //: * Client: использует объект Proxy для доступа к объекту RealSubject
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/facade) и [тут](https://metanit.com/sharp/patterns/4.3.php)
-
 //: ### Protection proxy example:
-
 ///Subject
 protocol DoorOpening {
     func open(doors: String) -> String
@@ -441,7 +429,6 @@ computer.authenticate(password: "pass")
 print(computer.open(doors: podBay))
 
 //: ### Virtual proxy example:
-
 ///Subject
 protocol HEVSuitMedicalAid {
     func administerMorphine() -> String
@@ -466,7 +453,6 @@ final class HEVSuitHumanInterface: HEVSuitMedicalAid {
 
 let humanInterface = HEVSuitHumanInterface()
 print(humanInterface.administerMorphine())
-
 //:  ## _Flyweight_
 //: ### Легковес — это структурный паттерн проектирования, который позволяет вместить бóльшее количество объектов в отведённую оперативную память. Легковес экономит память, разделяя общее состояние объектов между собой, вместо хранения одинаковых данных в каждом объекте.
 //: Когда использовать легковес?
@@ -480,7 +466,6 @@ print(humanInterface.administerMorphine())
 //: * Client: использует объекты приспособленцев. Может хранить внешнее состояние и передавать его в качестве аргументов в методы приспособленцев
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/facade) и [тут](https://metanit.com/sharp/patterns/4.3.php)
-
 ///Flyweight
 protocol House{
     var stages: Int { get } // количество этажей
@@ -549,7 +534,6 @@ for _ in 1...5{
         latitude += 0.1
     }
 }
-
 //:
 //: [к содержанию](Intro)
 //:

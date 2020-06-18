@@ -9,7 +9,6 @@ import Foundation
 //:  ## _Factory Method_
 //: ### Фабричный метод — это порождающий паттерн проектирования, который определяет общий интерфейс для создания объектов в суперклассе, позволяя подклассам изменять тип создаваемых объектов.
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/factory-method)
-//:
 protocol Drivable{
     func Drive()
 }
@@ -53,11 +52,9 @@ enum VehicleFactory{
 (VehicleFactory.drive(for: .BMWx5) as Drivable).Drive()
 (VehicleFactory.drive(for: .KAMAZ) as Drivable).Drive()
 (VehicleFactory.drive(for: .MercedesTourismo) as Drivable).Drive()
-
 //:  ## _Abstract Factory_
 //: ### Абстрактная фабрика — это порождающий паттерн проектирования, который позволяет создавать семейства связанных объектов, не привязываясь к конкретным классам создаваемых объектов.
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/abstract-factory)
-
 protocol VehicleDrivable{
     func Drive()
 }
@@ -107,11 +104,9 @@ enum CarsFactoryType: CarAbstractFactory{
 
 CarsFactoryType.bmw.CreateCar().Drive()
 CarsFactoryType.mercedes.CreateCar().Drive()
-
 //:  ## _Prototype_
 //: ### Прототип — это порождающий паттерн проектирования, который позволяет копировать объекты, не вдаваясь в подробности их реализации.
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/prototype)
-
 protocol Prototype{
     associatedtype Object
     func clone() -> Object
@@ -144,7 +139,6 @@ print("\(il96_300)")
 var il96_MD = il96_protype.clone()
 il96_MD.name += "MD"
 print("\(il96_MD)")
-
 //:  ## _Builder_
 //: ### Строитель — это порождающий паттерн проектирования, который позволяет создавать сложные объекты пошагово. Строитель даёт возможность использовать один и тот же код строительства для получения разных представлений объектов.
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/builder)
@@ -190,7 +184,6 @@ let windowsBilder = WindowsBuiler{
 var house = HouseBuilder(wallBuilder: wallbuilder, windowsBuiler: windowsBilder)
 
 print("Walls: \(String(describing: house?.walls)), windows: \(String(describing: house?.windows))")
-
 //:  ## _Singletone_
 //: ### Одиночка — это порождающий паттерн проектирования, который гарантирует, что у класса есть только один экземпляр, и предоставляет к нему глобальную точку доступа.
 //: * Одиночка решает сразу две проблемы, нарушая принцип единственной ответственности класса. Гарантирует наличие единственного экземпляра класса. Чаще всего это полезно для доступа к какому-то общему ресурсу, например, базе данных.
@@ -198,7 +191,6 @@ print("Walls: \(String(describing: house?.walls)), windows: \(String(describing:
 //: Правительство государства — хороший пример одиночки. В государстве может быть только одно официальное правительство. Вне зависимости от того, кто конкретно заседает в правительстве, оно имеет глобальную точку доступа «Правительство страны N».
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/singleton)
-
 final class Singletone{
     static let shared = Singletone()
     private init(){
@@ -207,7 +199,6 @@ final class Singletone{
 }
 
 let instance = Singletone.shared
-
 //: [к содержанию](Intro)
 //:
 //: [к структурным паттернам](StructuralPatterns)

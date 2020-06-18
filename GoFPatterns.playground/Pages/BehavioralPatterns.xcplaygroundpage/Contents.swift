@@ -16,7 +16,6 @@ import Foundation
 //: * Client: клиент - создает команду и устанавливает ее получателя с помощью метода SetCommand()
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/command) и [тут](https://metanit.com/sharp/patterns/3.3.php)
-
 ///Command
 protocol Command{
     func Execute()
@@ -60,7 +59,6 @@ let microwave = Microwave()
 let command = MicrowaveCommand(microwave: microwave)
 command.Execute()
 command.Undo()
-
 //:  ## _Strategy_
 //: ### Стратегия — это поведенческий паттерн проектирования, который определяет семейство схожих алгоритмов и помещает каждый из них в собственный класс, после чего алгоритмы можно взаимозаменять прямо во время исполнения программы.
 //:Участники:
@@ -69,7 +67,6 @@ command.Undo()
 //: * Класс Context хранит ссылку на объект Strategy и связан с интерфейсом Strategy отношением агрегации.
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/strategy) и [тут](https://metanit.com/sharp/patterns/3.1.php)
-
 ///Strategy
 protocol Movable
 {
@@ -111,7 +108,6 @@ var auto = Car(passengers: 4, model: "Volvo", strategy: PetrolMove())
 auto.move()
 auto.strategy = ElectricMove()
 auto.move();
-
 //:  ## _Mediator_
 //: ### Медиатор — это поведенческий паттерн проектирования, который позволяет уменьшить связанность (reduce coupling) множества классов между собой, благодаря перемещению этих связей в один класс-посредник.
 //:Когда используется паттерн Посредник?
@@ -125,7 +121,6 @@ auto.move();
 //: * ConcreteMediator: конкретный посредник, реализующий интерфейс типа Mediator
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/mediator) и [тут](https://metanit.com/sharp/patterns/3.9.php)
-
 ///Mediator
 protocol Mediator{
     func send(message: String, from colleague: Colleague)
@@ -209,7 +204,6 @@ mediator.tester = tester
 customer.send(message: "Есть заказ, надо сделать программу")
 programmer.send(message: "Программа готова, надо протестировать")
 tester.send(message: "Программа протестирована и готова к продаже")
-
 //:  ## _Template_
 //: ### Шаблонный метод — это поведенческий паттерн проектирования, который определяет скелет алгоритма, перекладывая ответственность за некоторые его шаги на подклассы. Паттерн позволяет подклассам переопределять шаги алгоритма, не меняя его общей структуры.
 //:Когда использовать шаблонный метод?
@@ -221,7 +215,6 @@ tester.send(message: "Программа протестирована и гот�
 //: * ConcreteClass: подкласс, который может переопределять различные методы родительского класса.
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/template-method) и [тут](https://metanit.com/sharp/patterns/3.4.php)
-
 ///AbstractClass
 protocol Education{
     func Learn()
@@ -263,7 +256,6 @@ class School : Education
 }
 let school = School()
 school.Learn()
-
 //:  ## _Memento_
 //: ### Снимок — это поведенческий паттерн проектирования, который позволяет сохранять и восстанавливать прошлые состояния объектов, не раскрывая подробностей их реализации.
 //:Когда использовать Memento?
@@ -276,7 +268,6 @@ school.Learn()
 //: * Caretaker: выполняет только функцию хранения объекта Memento, в то же время у него нет полного доступа к хранителю и никаких других операций над хранителем, кроме собственно сохранения, он не производит
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/memento) и [тут](https://metanit.com/sharp/patterns/3.10.php)
- 
 // Memento
 class HeroMemento{
     var patrons: Int
@@ -332,7 +323,6 @@ hero.Shoot() //делаем выстрел, осталось 8 патронов
 hero.RestoreState(memento: game.History.last!)
 
 hero.Shoot(); //делаем выстрел, осталось 8 патронов
-
 //:  ## _Observer (Publisher-Subscriber)_
 //: ### Наблюдатель — это поведенческий паттерн проектирования, который создаёт механизм подписки, позволяющий одним объектам следить и реагировать на события, происходящие в других объектах.
 //:Когда использовать Наблюдатель?
@@ -347,7 +337,6 @@ hero.Shoot(); //делаем выстрел, осталось 8 патронов
 //: * ConcreteObserver: конкретная реализация интерфейса IObserver.
 //:
 //: [Более подробно](https://refactoring.guru/ru/design-patterns/observer) и [тут](https://metanit.com/sharp/patterns/3.2.php)
-
 ///Observer
 protocol Subscriber{
     func Update(stockInfo: StockInfo)
@@ -401,10 +390,6 @@ class Broker : Subscriber, Equatable{
         stock.RegisterObserver(subscriber: self)
     }
     
-    func Update(publisher: Stock){
-        
-    }
-    
     func StopTrade(){
         self.stock.RemoveObserver(subscriber: self)
     }
@@ -418,15 +403,16 @@ class Bank : Subscriber, Equatable{
     
     let name: String
     let id = UUID()
+    var stock: Stock
     
-    init(name: String)
-    {
+    init(name: String, stock: Stock){
         self.name = name
+        self.stock = stock
         stock.RegisterObserver(subscriber: self)
     }
     
     func Update(stockInfo: StockInfo) {
-        if (stockInfo.Euro > 75){
+        if (stockInfo.Euro > 76){
             print("Банк \(self.name) продает евро;  Курс евро: \(stockInfo.Euro)")
         }
         else{
@@ -471,7 +457,7 @@ final class Stock: Publisher{
 }
 
 var stock = Stock()
-var bank = Bank(name: "ЮнитБанк")
+var bank = Bank(name: "ЮнитБанк", stock: stock)
 var broker = Broker(name: "Иван Иваныч", stock: stock)
 // имитация торгов
 stock.Trade()
@@ -480,6 +466,315 @@ broker.StopTrade()
 // имитация торгов
 stock.Trade()
 stock.Trade()
+//:  ## _Iterator_
+//: ### Итератор — это поведенческий паттерн проектирования, который даёт возможность последовательно обходить элементы составных объектов, не раскрывая их внутреннего представления.
+//:Когда использовать итератор?
+//: * Когда необходимо осуществить обход объекта без раскрытия его внутренней структуры
+//: * Когда имеется набор составных объектов, и надо обеспечить единый интерфейс для их перебора
+//: * Когда необходимо предоставить несколько альтернативных вариантов перебора одного и того же объекта
+//:
+//:Участники:
+//: * Iterator: определяет интерфейс для обхода составных объектов
+//: * Aggregate: определяет интерфейс для создания объекта-итератора
+//: * ConcreteIterator: конкретная реализация итератора для обхода объекта Aggregate. Для фиксации индекса текущего перебираемого элемента использует целочисленную переменную _current
+//: * ConcreteAggregate: конкретная реализация Aggregate. Хранит элементы, которые надо будет перебирать
+//: * Client: использует объект Aggregate и итератор для его обхода
+//:
+//: [Более подробно](https://refactoring.guru/ru/design-patterns/iterator) и [тут](https://metanit.com/sharp/patterns/3.5.php)
+struct SuffixIterator : IteratorProtocol{
+    
+    //state:
+    let string: String
+    var last : String.Index
+    var offset: String.Index
+    
+    init(string: String) {
+        self.string = string
+        self.last = string.endIndex
+        self.offset = string.startIndex
+    }
+    
+    mutating func next() -> Substring?{
+        guard offset < last else { return nil }
+        let sub: Substring = string[offset..<last]
+        string.formIndex(after: &offset)
+        return sub
+    }
+}
+
+struct SuffixSequence: Sequence {
+    
+    let string: String
+    
+    func makeIterator() -> SuffixIterator{
+        return SuffixIterator(string: string)
+    }
+}
+
+for suffix in SuffixSequence(string: "Pattern Iterator"){
+    print(suffix)
+}
+//:  ## _State_
+//: ### Состояние — это поведенческий паттерн проектирования, который позволяет объектам менять поведение в зависимости от своего состояния. Извне создаётся впечатление, что изменился класс объекта.
+//:Когда использовать паттерн?
+//: * Когда поведение объекта должно зависеть от его состояния и может изменяться динамически во время выполнения
+//: * Когда в коде методов объекта используются многочисленные условные конструкции, выбор которых зависит от текущего состояния объекта
+//:
+//:Участники:
+//: * State: определяет интерфейс состояния
+//: * Классы StateA и StateB - конкретные реализации состояний
+//: * Context: представляет объект, поведение которого должно динамически изменяться в соответствии с состоянием. Выполнение же конкретных действий делегируется объекту состояния
+//:
+//: [Более подробно](https://refactoring.guru/ru/design-patterns/state) и [тут](https://metanit.com/sharp/patterns/3.6.php)
+///State:
+protocol WaterState{
+    func Heat()-> WaterState
+    func Frost()-> WaterState
+}
+///Context:
+class  Water{
+    var state: WaterState
+    
+    init (state: WaterState){
+        self.state = state
+    }
+    func Heat() {
+        self.state = state.Heat()
+    }
+    
+    func Frost() {
+        self.state = state.Frost()
+    }
+}
+///StateA:
+class SolidWaterState : WaterState{
+    var water: Water?
+    
+    func Heat() -> WaterState{
+        print("Превращаем лед в жидкость")
+        
+        return LiquidWaterState()
+    }
+    
+    func Frost() -> WaterState{
+        print("Продолжаем заморозку льда")
+        return SolidWaterState()
+    }
+}
+///StateB:
+class LiquidWaterState : WaterState{
+    func Heat() -> WaterState{
+        print("Превращаем жидкость в пар")
+        return GasWaterState()
+    }
+    
+    func Frost() -> WaterState{
+        print("Превращаем жидкость в лед")
+        return SolidWaterState()
+    }
+}
+///StateC:
+class GasWaterState : WaterState{
+    func Heat() -> WaterState{
+        print("Повышаем температуру водяного пара")
+        return GasWaterState()
+    }
+    
+    func Frost() -> WaterState {
+        print("Превращаем водяной пар в жидкость")
+        return LiquidWaterState()
+    }
+}
+
+var water = Water(state: LiquidWaterState())
+water.Heat()
+water.Heat()
+water.Frost()
+water.Frost()
+water.Heat()
+//:  ## _Chain of responsibility_
+//: ### Цепочка обязанностей — это поведенческий паттерн проектирования, который позволяет передавать запросы последовательно по цепочке обработчиков. Каждый последующий обработчик решает, может ли он обработать запрос сам и стоит ли передавать запрос дальше по цепи.
+//:Когда использовать паттерн?
+//: * Когда имеется более одного объекта, который может обработать определенный запрос
+//: * Когда надо передать запрос на выполнение одному из нескольких объект, точно не определяя, какому именно объекту
+//: * Когда набор объектов задается динамически
+//:
+//:Участники:
+//: * Handler: определяет интерфейс для обработки запроса. Также может определять ссылку на следующий обработчик запроса
+//: * ConcreteHandler1 и ConcreteHandler2: конкретные обработчики, которые реализуют функционал для обработки запроса. При невозможности обработки и наличия ссылки на следующий обработчик, передают запрос этому обработчику
+//: * Client: отправляет запрос объекту Handler
+//:
+//: [Более подробно](https://refactoring.guru/ru/design-patterns/chain-of-responsibility) и [тут](https://metanit.com/sharp/patterns/3.7.php)
+class Receiver{
+    // банковские переводы
+    let BankTransfer: Bool?
+    // денежные переводы - WesternUnion, Unistream
+    let MoneyTransfer: Bool?
+    // перевод через PayPal
+    let PayPalTransfer: Bool?
+    
+    init(bt : Bool, mt: Bool, ppt: Bool)
+    {
+        BankTransfer = bt
+        MoneyTransfer = mt
+        PayPalTransfer = ppt
+    }
+}
+
+protocol PaymentHandler{
+    var successor: PaymentHandler? { get }
+    func Handle(receiver: Receiver)
+}
+ 
+final class BankPaymentHandler : PaymentHandler
+{
+    var successor: PaymentHandler?
+    
+    func Handle(receiver: Receiver){
+        if (receiver.BankTransfer == true){
+            print("Выполняем банковский перевод")
+        } else {self.successor?.Handle(receiver: receiver)}
+    }
+}
+ 
+final class PayPalPaymentHandler : PaymentHandler{
+    var successor: PaymentHandler?
+    
+    func Handle(receiver: Receiver){
+        if (receiver.PayPalTransfer == true){
+            print("Выполняем перевод через PayPal")
+        } else {self.successor?.Handle(receiver: receiver)}
+    }
+}
+// переводы с помощью системы денежных переводов
+final class MoneyPaymentHandler : PaymentHandler
+{
+    var successor: PaymentHandler?
+    
+    func Handle(receiver: Receiver){
+        if (receiver.MoneyTransfer == true){
+            print("Выполняем перевод через системы денежных переводов")
+        }
+        else {self.successor?.Handle(receiver: receiver)}
+    }
+}
+
+var bankPaymentHandler = BankPaymentHandler()
+var moneyPaymentHadler =  MoneyPaymentHandler()
+var paypalPaymentHandler =  PayPalPaymentHandler()
+bankPaymentHandler.successor = paypalPaymentHandler
+paypalPaymentHandler.successor = moneyPaymentHadler
+let receiver = Receiver(bt: false, mt: true, ppt: true)
+bankPaymentHandler.Handle(receiver: receiver)
+//:  ## _Visitor_
+//: ### Посетитель — это поведенческий паттерн проектирования, который позволяет добавлять в программу новые операции, не изменяя классы объектов, над которыми эти операции могут выполняться.
+//:Когда использовать паттерн?
+//: * Когда имеется много объектов разнородных классов с разными интерфейсами, и требуется выполнить ряд операций над каждым из этих объектов
+//: * Когда классам необходимо добавить одинаковый набор операций без изменения этих классов
+//: * Когда часто добавляются новые операции к классам, при этом общая структура классов стабильна и практически не изменяется
+//:
+//:Участники:
+//: * Visitor: интерфейс посетителя, который определяет метод Visit() для каждого объекта Element
+//: * ConcreteVisitor1 / ConcreteVisitor2: конкретные классы посетителей, реализуют интерфейс, определенный в Visitor.
+//: * Element: определяет метод Accept(), в котором в качестве параметра принимается объект Visitor
+//: * ElementA / ElementB: конкретные элементы, которые реализуют метод Accept()
+//: *ObjectStructure: некоторая структура, которая хранит объекты Element и предоставляет к ним доступ. Это могут быть и простые списки, и сложные составные структуры в виде деревьев
+//:
+//: [Более подробно](https://refactoring.guru/ru/design-patterns/visitor) и [тут](https://metanit.com/sharp/patterns/3.11.php)
+///Visitor
+protocol Visitor{
+    func VisitPersonAcc(person: Person)
+    func VisitCompanyAc(company: Company)
+}
+ 
+///ConcreteVisitor1
+// сериализатор в HTML
+class HtmlVisitor : Visitor
+{
+    func VisitPersonAcc(person: Person) {
+        var result = "<table><tr><td>Свойство<td><td>Значение</td></tr>"
+        result += "<tr><td>Name<td><td>\(String(describing: person.name))</td></tr>"
+        result += "<tr><td>Number<td><td>\(String(describing: person.number))</td></tr></table>"
+        print(result)
+    }
+    
+    func VisitCompanyAc(company: Company) {
+        var result = "<table><tr><td>Свойство<td><td>Значение</td></tr>"
+        result += "<tr><td>Name<td><td>\(String(describing: company.name))</td></tr>"
+        result += "<tr><td>RegNumber<td><td>\(String(describing: company.regNumber))</td></tr>"
+        result += "<tr><td>Number<td><td>\(String(describing: company.number))</td></tr></table>"
+        print(result)
+    }
+}
+ 
+///ConcreteVisitor2
+// сериализатор в XML
+class XmlVisitor : Visitor
+{
+    func VisitPersonAcc(person: Person) {
+        let result = "<Person><Name>\(String(describing: person.name))</Name><Number>\(String(describing: person.number))</Number><Person>"
+        print(result)
+    }
+    
+    func VisitCompanyAc(company: Company) {
+        let result = "<Company><Name>\(String(describing: company.name))</Name><RegNumber>\(String(describing: company.regNumber))</RegNumber><Number>\(String(describing: company.number))</Number><Company>"
+        print(result)
+    }
+}
+ 
+class BankTrust{
+    var accounts = [Account]()
+    
+    func Add(acc: Account){
+        accounts.append(acc)
+    }
+
+    func Accept(visitor: Visitor){
+        for acc in self.accounts {
+            acc.Accept(visitor: visitor)
+        }
+    }
+}
+ 
+protocol Account{
+    func Accept(visitor: Visitor)
+}
+ 
+class Person : Account
+{
+    var name: String
+    var number: String
+ 
+    func Accept(visitor: Visitor){
+        visitor.VisitPersonAcc(person: self)
+    }
+    init(_ name: String, _ number: String){
+        self.name = name
+        self.number = number
+    }
+}
+ 
+class Company : Account
+{
+    var name: String
+    var regNumber: String
+    var number: String
+ 
+    func Accept(visitor: Visitor){
+        visitor.VisitCompanyAc(company: self)
+    }
+    init(_ name: String,_ regNumber: String, _ number: String){
+        self.name = name
+        self.regNumber = regNumber
+        self.number = number
+    }
+}
+
+var structure = BankTrust()
+structure.Add(acc: Person("Иван Алексеев", "82184931"))
+structure.Add(acc: Company("Apple","ewuir32141324","3424131445"))
+structure.Accept(visitor: HtmlVisitor())
+structure.Accept(visitor: XmlVisitor())
 //: [к содержанию](Intro)
 //:
 //: [к порождающим паттернам](CreationalPatterns)
