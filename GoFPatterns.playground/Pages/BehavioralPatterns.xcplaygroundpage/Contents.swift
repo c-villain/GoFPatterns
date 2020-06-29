@@ -224,7 +224,6 @@ protocol Education{
     func GetDocument();
 }
 
-///ConcreteClass
 extension Education{
     
     func PassExams(){
@@ -239,6 +238,7 @@ extension Education{
     }
 }
 
+///ConcreteClass
 class School : Education
 {
     func Enter(){
